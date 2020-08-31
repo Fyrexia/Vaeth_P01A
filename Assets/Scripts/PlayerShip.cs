@@ -38,10 +38,7 @@ public class PlayerShip : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
+      
 
 
     }
