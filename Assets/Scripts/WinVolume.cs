@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class HazardVolume : MonoBehaviour
+public class WinVolume : MonoBehaviour
 {
-    [SerializeField] Text YouLoseText = null;
-    
+    [SerializeField] Text WinText= null;
 
-
-
+    public void Awake()
+    {
+        WinText.enabled = false;
+    }
     private void OnTriggerEnter(Collider other)
     {
         PlayerShip playerShip
             = other.gameObject.GetComponent<PlayerShip>();
 
-        if (playerShip !=null)
+        if (playerShip !=null && playerShip.count == 0)
         {
-            YouLoseText.enabled = true;
+            playerShip.Won = true;
+            WinText.enabled = true;
             playerShip.Kill();
-            DelayHelper.DelayAction(this, GameRestart, 2.0f);
+            
         }
 
 
@@ -28,11 +29,7 @@ public class HazardVolume : MonoBehaviour
     }
 
 
-    public void GameRestart()
-    {
-        GameInput.ReloadLevel();
-    }
-
+   
 
 
 
