@@ -55,7 +55,7 @@ public class PowerupTeleport : MonoBehaviour
                 TeleportHolder -= TeleportUses;
                 playerShip?.SetTeleportReference(false);
                 DelayHelper.DelayAction(this, EnableObject, 5.0f);
-                
+                poweredUp = false;
 
                 
 

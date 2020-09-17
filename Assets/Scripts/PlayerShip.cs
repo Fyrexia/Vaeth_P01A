@@ -20,11 +20,20 @@ public class PlayerShip : MonoBehaviour
     [SerializeField] float turnSpeed = 3f;
     public bool Won = false;
     
-    [Header("Feedback")]
+    [Header("Visual Feedback")]
     [SerializeField] TrailRenderer trail = null;
     [SerializeField] TrailRenderer trail2 = null;
     [SerializeField] GameObject TeleportRef = null;
     [SerializeField] Text CoinText = null;
+    [SerializeField] Text TeleportInstructions = null;
+
+    [Header("Audio Feedback")]
+    [SerializeField] AudioClip DeathExplosion = null;
+    [SerializeField] AudioClip PowerUpBoost = null;
+    [SerializeField] AudioClip PowerUpTeleporter = null;
+    [SerializeField] AudioClip TeleportPickUp = null;
+    [SerializeField] AudioClip Music = null;
+    [SerializeField] AudioClip CoinsNoise = null;
 
     [Header("Rigid Body autofind")]
     public  Rigidbody rb = null;
@@ -60,8 +69,10 @@ public class PlayerShip : MonoBehaviour
         trail.enabled = false;
         trail2.enabled = false;
 
-        TeleportRef.SetActive(false);
+        TeleportInstructions.enabled = false;
 
+        TeleportRef.SetActive(false);
+        AudioHelper.PlayClip2D(Music, 0.1f);
         
         SetCountText();
     }
@@ -81,6 +92,7 @@ public class PlayerShip : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Pick Up"))
         {
+            AudioHelper.PlayClip2D(CoinsNoise, 0.1f);
             other.gameObject.SetActive(false);
             count = count - 1;
             SetCountText();
@@ -123,12 +135,16 @@ public class PlayerShip : MonoBehaviour
         rb.MoveRotation(rb.rotation * turnOffset);
     }
 
-
+    //Kill the ship
     public void Kill()
     {
         Debug.Log("Player has been killed!");
+        AudioHelper.PlayClip2D(DeathExplosion, 0.1f);
         this.gameObject.SetActive(false);
     }
+
+
+
 
     //SpeedPowers
     public void SetSpeed(float speedChange)
@@ -138,6 +154,7 @@ public class PlayerShip : MonoBehaviour
 
     public void SetBoosters(bool activeState)
     {
+        AudioHelper.PlayClip2D(PowerUpBoost, 0.2f);
         trail.enabled = activeState;
     }
 
@@ -147,17 +164,26 @@ public class PlayerShip : MonoBehaviour
     public void SetTeleportBoost(bool activeState)
     {
         trail2.enabled = activeState;
+        AudioHelper.PlayClip2D(PowerUpTeleporter, 0.4f);
         DelayHelper.DelayAction(this, Trail2Off, .2f);
     }
-
+    public bool teleportnoiseOn = false;
     public void SetTeleportReference(bool activeState)
     {
+        if (teleportnoiseOn == false)
+        {
+            TeleportInstructions.enabled = true;
+            AudioHelper.PlayClip2D(TeleportPickUp, 0.4f);
+            teleportnoiseOn = true;
+        }
         TeleportRef.SetActive(activeState);
     }
 
     public void Trail2Off()
     {
+        TeleportInstructions.enabled = false;
         trail2.enabled = false;
+        teleportnoiseOn = false;
     }
 
     public void TeleportPower()

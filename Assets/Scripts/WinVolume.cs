@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class WinVolume : MonoBehaviour
 {
     [SerializeField] Text WinText= null;
+    [SerializeField] AudioClip WinNoise = null;
 
     public void Awake()
     {
@@ -18,6 +19,7 @@ public class WinVolume : MonoBehaviour
 
         if (playerShip !=null && playerShip.count == 0)
         {
+            AudioHelper.PlayClip2D(WinNoise, .3f);
             playerShip.Won = true;
             WinText.enabled = true;
             playerShip.Kill();

@@ -13,7 +13,7 @@ public class GameInput : MonoBehaviour
     [SerializeField] PlayerShip playerShip = null;
 
     [SerializeField] float TimeCounter = 0;
-    [SerializeField] float CoinCounter = 0;
+    
     private float TimeOnScreen = 0;
     // Update is called once per frame
 
